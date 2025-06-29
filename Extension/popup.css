@@ -1,0 +1,50 @@
+body {
+  width: 350px; /* Your desired width */
+  height: 500px; /* Your desired height */
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: sans-serif; /* Example styling */
+  background-color: #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /*Center content vertically*/
+ justify-content: flex-start; /*Center content horizontally */
+}
+
+#chat-messages{
+    width: 300px; /* size of chat window */
+    height: 300px; /* size of chat window */
+    overflow-y: auto; /* Enable vertical scrolling */
+    background-color: #ffffff; /* Background color of chat window */
+    padding: 10px;
+    border: 1px solid #000000
+}
+
+#user-input {
+    width: 300px; /* size of input area */
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between input and button */
+    margin-top: 10px; /* Space above input area */
+}
+
+/* Styles for individual messages */
+.message {
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  max-width: 80%;
+  word-wrap: break-word; /* Prevents long words from breaking layout */
+}
+
+.user-message {
+  background-color: #e1ffc7; /* Light green */
+  align-self: flex-end; /* Align user messages to the right */
+  margin-left: auto; /* Pushes to the right */
+}
+
+.bot-message {
+  background-color: #f0f0f0; /* Light grey */
+  align-self: flex-start; /* Align bot messages to the left */
+  margin-right: auto; /* Pushes to the left */
+}
