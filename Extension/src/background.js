@@ -9,7 +9,7 @@ const lexClient = new LexRuntimeV2Client({
     region: "us-east-1", 
     credentials: {
         accessKeyId: "AKIARWPFIBPNW743PTGP",    // <--- REPLACE WITH YOUR AWS ACCESS KEY ID https://116981763035.signin.aws.amazon.com/console, Job_Logger_User
-        secretAccessKey: "lPc4GhEN2EgbXAYeMmtRM4e+sniPM9N5YAm9FlfA", // <--- REPLACE WITH YOUR AWS SECRET ACCESS KEY cpL60U9$
+        secretAccessKey: "", // <--- REPLACE WITH YOUR AWS SECRET ACCESS KEY 
     },
 });
 
