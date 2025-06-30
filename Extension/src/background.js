@@ -8,14 +8,14 @@ import { v4 as uuidv4 } from 'uuid'; // For generating unique session IDs
 const lexClient = new LexRuntimeV2Client({
     region: "us-east-1", 
     credentials: {
-        accessKeyId: "AKIARWPFIBPNW743PTGP",    // <--- REPLACE WITH YOUR AWS ACCESS KEY ID https://116981763035.signin.aws.amazon.com/console, Job_Logger_User
+        accessKeyId: "",    // <--- REPLACE WITH YOUR AWS ACCESS KEY ID https://116981763035.signin.aws.amazon.com/console, Job_Logger_User
         secretAccessKey: "", // <--- REPLACE WITH YOUR AWS SECRET ACCESS KEY 
     },
 });
 
 // Step 3. Define your Lex Bot details
 const BOT_ID = "8U2T8GWDG9";           // Get this from your Lex bot's "Bot details" page
-const BOT_ALIAS_ID = "$LATEST"; // Usually "LIVE" or "$LATEST" (check your bot's Aliases section)
+const BOT_ALIAS_ID = "TSTALIASID"; // Usually "LIVE" or "$LATEST" (check your bot's Aliases section)
 const LOCALE_ID = "en_US";                  // Matches your bot's locale
 
 // Step 4. Manage Lex Session ID
@@ -54,7 +54,29 @@ async function sendTextToLex(inputText) {
         const response = await lexClient.send(command);
         console.log("Lex API Response:", response);
 
-        // ... (rest of sendTextToLex logic remains the same for processing response messages) ...
+        let botMessage = "I'm not sure what to say.";
+
+        if (response.messages && response.messages.length > 0) {
+            console.log("Got a message from Lex:", response.messages[0].content); // response.messages is an array, within array is a dictionary
+            if (response.messages[0].contentType == "PlainText"){
+                botMessage = response.messages[0].content;
+            }
+        }
+        else if (response.sessionState && response.sessionState.dialogAction){
+            // if there's a dialog action, but no messages, lex is doing something.
+            const dialogActionType = response.sessionState.dialogAction.type; // <-- What Lex wants to do/did
+            const slotToElicit = response.sessionState.dialogAction.slotToElicit;
+
+            console.log(`Lex Dialog Action: ${dialogActionType}`); // Log it for debugging
+            if (dialogActionType === "ElicitSlot" && slotToElicit) {
+                botMessage = `(DEBUG: Lex wants ${slotToElicit} but sent no explicit message in 'messages' array. Check Lex prompts in console.)`;
+            }
+            else if (dialogActionType === "Close" && response.sessionState.intent.state === "Fulfilled") {
+                // If Lex is closing the conversation AND the intent is fulfilled
+                botMessage = response.messages[0].content; // A simple completion message
+            }
+        }
+        return botMessage; // Return the bot's response content
 
     } catch (error) {
         console.error("Error calling Lex API:", error);
